@@ -9,7 +9,12 @@ public class Runner {
 	@CucumberOptions(features = "src/test/resources/features", 
 			glue = { "stepDefinitions"},
 			monochrome = true, dryRun = false,
-            plugin = { "html:target/cucumber.html", "json:target/cucumber.json" })
+            plugin = { "pretty",
+					"html:target/cucumber.html", "json:target/cucumber.json",
+					"junit:testngtarget/CucumberReports/CucumberReport.xml",
+					"com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:",
+					"io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
+			})
 	
 public class TestNGTestRunner extends AbstractTestNGCucumberTests {
 

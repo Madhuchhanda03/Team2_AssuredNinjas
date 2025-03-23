@@ -8,6 +8,5 @@ When Admin sets Authorization
     Given Admin creates POST Request for the LMS with request body
     When Admin sends HTTPS Request and  request Body with endpoin
     Then Admin receives 201 Created Status with response body.
-    
 
-  
+
