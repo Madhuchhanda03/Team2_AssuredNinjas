@@ -1,91 +1,64 @@
 package utils;
-import java.io.File;
+
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import org.apache.poi.ss.usermodel.CellStyle;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+
 public class ExcelReader {
-    public FileInputStream fi;
-    public FileOutputStream fo;
-    public XSSFWorkbook workbook;
-    public XSSFSheet sheet;
-    public XSSFRow row;
-    public XSSFCell cell;
-    public CellStyle style;
-    String path;
+	public static List<Map<String, String>> getAllDataFromExcel(String fileName, String scenario, String sheetName) {
+		List<Map<String, String>> dataList = new ArrayList<>();
+		try (FileInputStream fis = new FileInputStream(".\\src\\test\\resources\\testData\\" + fileName)) {
+			Workbook workbook = WorkbookFactory.create(fis);
 
+			Sheet sheet = workbook.getSheet(sheetName);
+			if (sheet == null) {
+				throw new RuntimeException("Sheet \"" + sheetName + "\" not found in " + fileName);
+			}
 
-    public File jsonFile;
+			Row headerRow = sheet.getRow(0);
+			if (headerRow == null) {
+				throw new RuntimeException("No header row found in sheet: " + sheetName);
+			}
 
-    public ExcelReader(String path)
-    {
-        this.path=path;
-    }
+			int totalRows = sheet.getPhysicalNumberOfRows();
+			int totalCols = headerRow.getPhysicalNumberOfCells();
 
-    public File getJSONFile (String jsonPath)
-    {
-        jsonFile= new File(jsonPath);
+			DataFormatter dataFormatter = new DataFormatter();
 
-        return jsonFile;
-    }
+			for (int i = 1; i < totalRows; i++) {
+				Row row = sheet.getRow(i);
+				if (row != null && row.getCell(0).getStringCellValue().equalsIgnoreCase(scenario)) {
+					Map<String, String> dataMap = new HashMap<>();
 
+					for (int j = 0; j < totalCols; j++) {
+						String headerName = headerRow.getCell(j).getStringCellValue();
+						Cell cell = row.getCell(j);
 
-    public String getCellData(String sheetName,int rownum,int colnum) throws IOException
-    {
-        fi=new FileInputStream(path);
-        workbook=new XSSFWorkbook(fi);
-        sheet=workbook.getSheet(sheetName);
-        row=sheet.getRow(rownum);
-        cell=row.getCell(colnum);
+						String cellValue = (cell != null) ? dataFormatter.formatCellValue(cell) : "";
+						dataMap.put(headerName, cellValue);
+					}
 
-        DataFormatter formatter = new DataFormatter();
-        String data;
-        try{
-            data = formatter.formatCellValue(cell); //Returns the formatted value of a cell as a String regardless of the cell type.
-        }
-        catch(Exception e)
-        {
-            data="";
-        }
-        workbook.close();
-        fi.close();
-        return data;
-    }
+					dataList.add(dataMap);
+				}
+			}
+		} catch (IOException e) {
+			throw new RuntimeException("Failed to read Excel file: " + fileName, e);
+		}
 
-    public void setCellData(String sheetName,int rownum,int colnum,String data) throws IOException
-    {
-        File xlfile=new File(path);
-        if(!xlfile.exists())    // If file not exists then create new file
-        {
-            workbook=new XSSFWorkbook();
-            fo=new FileOutputStream(path);
-            workbook.write(fo);
-        }
+		if (dataList.isEmpty()) {
+			throw new RuntimeException("No matching scenario found in sheet: " + sheetName);
+		}
+		return dataList;
+	}
 
-        fi=new FileInputStream(path);
-        workbook=new XSSFWorkbook(fi);
-
-        if(workbook.getSheetIndex(sheetName)==-1) // If sheet not exists then create new Sheet
-            workbook.createSheet(sheetName);
-
-        sheet=workbook.getSheet(sheetName);
-
-        if(sheet.getRow(rownum)==null)   // If row not exists then create new Row
-            sheet.createRow(rownum);
-        row=sheet.getRow(rownum);
-
-        cell=row.createCell(colnum);
-        cell.setCellValue(data);
-
-        fo=new FileOutputStream(path);
-        workbook.write(fo);
-        workbook.close();
-        fi.close();
-        fo.close();
-    }
 }
