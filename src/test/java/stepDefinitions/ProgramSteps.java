@@ -20,9 +20,9 @@ public class ProgramSteps {
 
 	@Given("Admin creates POST Request for the LMS with request body")
 	public void admin_creates_post_request_for_the_lms_with_request_body() throws IOException {
-		
+
 		programPlayload.createNewProgramPayload();
-		 
+
 
 	}
 
@@ -63,7 +63,7 @@ public class ProgramSteps {
 
 	@Given("Admin creates POST Request for the LMS with invalid request body")
 	public void admin_creates_post_request_for_the_lms_with_invalid_request_body() throws IOException {
-		
+
 		programPlayload.createProgramWithInvalidRequestBody();
 	}
 
