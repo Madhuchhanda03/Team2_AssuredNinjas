@@ -10,7 +10,8 @@ public enum ApiEndPoints {
 	updateprogramByprogramName("/program/{programName}"),
 	updateprogramByprogramId("/putprogram/{programId}"),
 	deleteProgramByprogramId("/deletebyprogid/{programId}"),
-	deleteProgramByprogramName("/deletebyprogname/{programName}");
+	deleteProgramByprogramName("/deletebyprogname/{programName}"),
+	programInvalidEndPoint("/saveprogramjava");
 
 	String endPoint;
 
