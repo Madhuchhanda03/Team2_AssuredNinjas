@@ -53,7 +53,7 @@ public class ProgramSteps {
 
 	@Then("Admin receives {int} Method Not Allowed")
 	public void admin_receives_method_not_allowed(int statuscode) {
-		// Assert.assertEquals(response.getStatusCode(), statuscode);
+		 Assert.assertEquals(programPlayload.response.getStatusCode(), statuscode);
 	}
 
 	@Then("Admin receives {int} Bad Request Status")
@@ -68,12 +68,30 @@ public class ProgramSteps {
 	}
 
 	@Given("Admin creates POST Request for the LMS with missing values in the request body")
-	public void admin_creates_post_request_for_the_lms_with_missing_values_in_the_request_body() {
-
+	public void admin_creates_post_request_for_the_lms_with_missing_values_in_the_request_body() throws IOException {
+		programPlayload.programWithMissingValue();
 	}
 
 	@Given("Admin creates POST Request for the LMS with request body with missing additional field")
-	public void admin_creates_post_request_for_the_lms_with_request_body_with_missing_additional_field() {
+	public void admin_creates_post_request_for_the_lms_with_request_body_with_missing_additional_field() throws IOException {
+		programPlayload.createProgramWithMissingValueInAdditionalField();
 	}
+	
+	//*********************GET REQUEST********************************************
+	@Given("Admin creates GET Request for the LMS API")
+	public void admin_creates_get_request_for_the_lms_api() {
+	    
+	}
+
+	@When("Admin sends {string} HTTPS Request with {string} endpoint")
+	public void admin_sends_https_request_with_endpoint(String string, String string2) {
+	    
+	}
+
+	@Then("Admin receives {int} Status code")
+	public void admin_receives_status_code(int int1) {
+	    
+	}
+
 
 }
