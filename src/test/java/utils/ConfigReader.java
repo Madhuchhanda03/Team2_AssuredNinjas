@@ -5,29 +5,15 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class ConfigReader {
-	static Properties prop;
+	// static Properties prop;
 
-	public static void readDataFromConfig() throws IOException {
-		prop = new Properties();
+	public static String readDataFromConfig(String key) throws IOException {
+		Properties prop = new Properties();
 		FileInputStream file = new FileInputStream("./src/test/resources/testData/config.properties");
 		prop.load(file);
-		System.out.println(prop);
+		// System.out.println(prop);
+		return prop.getProperty(key);
 
 	}
 
-	public static String getBaseUrl() {
-		String baseUrl= prop.getProperty("baseUrl");
-		return baseUrl;
-
-	}
-	public static String getUsername() {
-		  String username=prop.getProperty("userLoginEmailId");
-		 return username;
-	  }  
-	  
-	  public static String getpassword() {
-		  String password=prop.getProperty("password");
-		 return password;
-	  }
-	
 }
