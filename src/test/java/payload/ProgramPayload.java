@@ -23,7 +23,7 @@ public class ProgramPayload extends CommonUtils {
 	RequestSpecification request;
 	ResponseSpecification resspec;
 	public Response response;
-	public String loginToken;
+	public static String loginToken;
 	public String programId;
 
 	public ProgramPojo addNewProgram(String programDescription, String programName, String programStatus) {
