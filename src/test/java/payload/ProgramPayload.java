@@ -55,7 +55,7 @@ public class ProgramPayload extends CommonUtils {
 			String programDescription = map.get("programDescription");
 			String programName = map.get("programName");
 			String programStatus = map.get("programStatus");
-			;
+			
 
 			request = given().spec(requestSpecification())
 					.body(addNewProgram(programDescription, programName, programStatus))
@@ -64,24 +64,24 @@ public class ProgramPayload extends CommonUtils {
 	}
 
 	public void requestWithInvalidEndpoint() {
-		ApiEndPoints addProgramEndpoint = ApiEndPoints.valueOf("programInvalidEndPoint");
-		response = request.when().post(addProgramEndpoint.getEndPoint());
+		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf("programInvalidEndPoint");
+		response = request.when().post(moduleEndpoint.getEndPoint());
 
 	}
 
 	public void ProgramResponse(String method, String endPoint) {
-		ApiEndPoints addProgramEndpoint = ApiEndPoints.valueOf(endPoint);
+		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
 
 		if (method.equalsIgnoreCase("POST")) {
-			response = request.when().post(addProgramEndpoint.getEndPoint());
+			response = request.when().post(moduleEndpoint.getEndPoint());
 			programId = response.jsonPath().getString("programId");
 		} else if (method.equalsIgnoreCase("PUT")) {
-			response = request.when().put(addProgramEndpoint.getEndPoint());
+			response = request.when().put(moduleEndpoint.getEndPoint());
 			programId = response.jsonPath().getString("programId");
 		} else if (method.equalsIgnoreCase("GET"))
-			response = request.when().get(addProgramEndpoint.getEndPoint());
+			response = request.when().get(moduleEndpoint.getEndPoint());
 		else if (method.equalsIgnoreCase("DELETE"))
-			response = request.when().delete(addProgramEndpoint.getEndPoint() + "/" + programId);
+			response = request.when().delete(moduleEndpoint.getEndPoint() + "/" + programId);
 
 	}
 
@@ -139,4 +139,17 @@ public class ProgramPayload extends CommonUtils {
 	}
 
 	// **************************GET REQUEST************************
+	public void programGetRequest() throws IOException {
+		request = given().spec(requestSpecification())
+				.header("Authorization", "Bearer " + loginToken);
+	}
+	public void getAllProgramWithoutAuthorization() throws IOException {
+		request = given().spec(requestSpecification());
+		
+	}
+	public void getRequestWithInvalidEndpoint() {
+		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf("programInvalidEndPoint");
+		response = request.when().get(moduleEndpoint.getEndPoint());
+
+	}
 }
