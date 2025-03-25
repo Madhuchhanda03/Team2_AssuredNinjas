@@ -2,6 +2,7 @@ package payload;
 
 import static io.restassured.RestAssured.given;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,6 +15,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
+import pojo.CommonIdHolder;
 import pojo.ProgramPojo;
 import utils.CommonUtils;
 import utils.ConfigReader;
@@ -23,8 +25,8 @@ public class ProgramPayload extends CommonUtils {
 	RequestSpecification request;
 	ResponseSpecification resspec;
 	public Response response;
-	public String loginToken;
-	public String programId;
+	public static String loginToken;
+	public static int statusCode;
 
 	public ProgramPojo addNewProgram(String programDescription, String programName, String programStatus) {
 		ProgramPojo programPojo = new ProgramPojo();
@@ -55,7 +57,6 @@ public class ProgramPayload extends CommonUtils {
 			String programDescription = map.get("programDescription");
 			String programName = map.get("programName");
 			String programStatus = map.get("programStatus");
-			
 
 			request = given().spec(requestSpecification())
 					.body(addNewProgram(programDescription, programName, programStatus))
@@ -69,20 +70,33 @@ public class ProgramPayload extends CommonUtils {
 
 	}
 
+	public void validPostHttpRequest(String method, String endPoint) {
+
+		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
+		response = request.when().post(moduleEndpoint.getEndPoint());
+		String id = response.jsonPath().getString("programId");
+		CommonIdHolder.setProgramId(id);
+	}
+
 	public void ProgramResponse(String method, String endPoint) {
 		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
 
 		if (method.equalsIgnoreCase("POST")) {
 			response = request.when().post(moduleEndpoint.getEndPoint());
-			programId = response.jsonPath().getString("programId");
+
 		} else if (method.equalsIgnoreCase("PUT")) {
 			response = request.when().put(moduleEndpoint.getEndPoint());
-			programId = response.jsonPath().getString("programId");
+
 		} else if (method.equalsIgnoreCase("GET"))
 			response = request.when().get(moduleEndpoint.getEndPoint());
 		else if (method.equalsIgnoreCase("DELETE"))
-			response = request.when().delete(moduleEndpoint.getEndPoint() + "/" + programId);
+			response = request.when().delete(moduleEndpoint.getEndPoint());
 
+	}
+
+	public void getResponseWithProgramId(String method, String endPoint) {
+		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
+		response = request.when().get(moduleEndpoint.getEndPoint() + CommonIdHolder.getProgramId());
 	}
 
 	public void createProgramWithInvalidRequestBody() throws IOException {
@@ -93,7 +107,6 @@ public class ProgramPayload extends CommonUtils {
 			String programDescription = map.get("programDescription");
 			String programName = map.get("programName");
 			String programStatus = map.get("programStatus");
-			;
 
 			request = given().spec(requestSpecification())
 					.body(addNewProgram(programDescription, programName, programStatus))
@@ -110,7 +123,6 @@ public class ProgramPayload extends CommonUtils {
 			String programDescription = map.get("programDescription");
 			String programName = map.get("programName");
 			String programStatus = map.get("programStatus");
-			;
 
 			request = given().spec(requestSpecification())
 					.body(addNewProgram(programDescription, programName, programStatus))
@@ -140,16 +152,32 @@ public class ProgramPayload extends CommonUtils {
 
 	// **************************GET REQUEST************************
 	public void programGetRequest() throws IOException {
-		request = given().spec(requestSpecification())
-				.header("Authorization", "Bearer " + loginToken);
+		request = given().spec(requestSpecification()).header("Authorization", "Bearer " + loginToken);
 	}
+
 	public void getAllProgramWithoutAuthorization() throws IOException {
 		request = given().spec(requestSpecification());
-		
+
 	}
+
 	public void getRequestWithInvalidEndpoint() {
 		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf("programInvalidEndPoint");
 		response = request.when().get(moduleEndpoint.getEndPoint());
+
+	}
+	// *******************GET REQUEST WITH PROGRAM ID *******************
+
+	public void getRequestWithInvalidProgramId(String endPoint) {
+		String invalidProgramId = "5432 11";
+		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
+		response = request.when().get(moduleEndpoint.getEndPoint() + invalidProgramId);
+	}
+
+	public void withInvalidBaseUri() throws FileNotFoundException {
+
+		Response getResponse = given().baseUri("https://lms-hackthon-feb25-fbe.herokuapp.com")
+				.contentType(ContentType.JSON).header("Authorization", "Bearer " + loginToken).when().get("/programs/");
+		statusCode = getResponse.getStatusCode();
 
 	}
 }

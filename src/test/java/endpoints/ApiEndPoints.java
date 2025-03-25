@@ -6,12 +6,12 @@ public enum ApiEndPoints {
 	addNewProgram("/saveprogram"),
 	getAllPrograms("/allPrograms"),
 	getAllProgramWithUsers("/allProgramsWithUsers"),
-	getProgramByProgramId("/programs/{programId}"),
+	getProgramByProgramId("/programs/"),
 	updateprogramByprogramName("/program/{programName}"),
 	updateprogramByprogramId("/putprogram/{programId}"),
 	deleteProgramByprogramId("/deletebyprogid/{programId}"),
 	deleteProgramByprogramName("/deletebyprogname/{programName}"),
-	programInvalidEndPoint("/saveprogramjava");
+	programInvalidEndPoint("/saveprogramws");
 
 	String endPoint;
 
