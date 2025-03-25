@@ -12,6 +12,7 @@ import io.restassured.specification.RequestSpecification;
 
 public class CommonUtils {
 	public static RequestSpecification request;
+	
 
 	public RequestSpecification requestSpecification() throws IOException {
 
@@ -25,6 +26,9 @@ public class CommonUtils {
 		}
 
 		return request;
+
 	}
+
+	
 
 }
