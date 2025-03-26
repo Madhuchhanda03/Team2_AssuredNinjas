@@ -19,6 +19,7 @@ import pojo.CommonIdHolder;
 import pojo.ProgramPojo;
 import utils.CommonUtils;
 import utils.ConfigReader;
+
 import utils.ExcelReader;
 
 public class ProgramPayload extends CommonUtils {
@@ -85,7 +86,7 @@ public class ProgramPayload extends CommonUtils {
 			response = request.when().post(moduleEndpoint.getEndPoint());
 
 		} else if (method.equalsIgnoreCase("PUT")) {
-			response = request.when().put(moduleEndpoint.getEndPoint());
+			response = request.when().put(moduleEndpoint.getEndPoint()+CommonIdHolder.getProgramId());
 
 		} else if (method.equalsIgnoreCase("GET"))
 			response = request.when().get(moduleEndpoint.getEndPoint());
@@ -140,7 +141,7 @@ public class ProgramPayload extends CommonUtils {
 			String programDescription = map.get("programDescription");
 			String programName = map.get("programName");
 			String programStatus = map.get("programStatus");
-			;
+			
 
 			request = given().spec(requestSpecification())
 					.body(addNewProgram(programDescription, programName, programStatus))
@@ -180,4 +181,63 @@ public class ProgramPayload extends CommonUtils {
 		statusCode = getResponse.getStatusCode();
 
 	}
+	//************** PUT REQUEST BY PROGRAM ID ****************************
+	public void updateProgramWithValidPayload() throws IOException {
+		List<Map<String, String>> list = ExcelReader.getAllDataFromExcel("programBook.xlsx", "Valid", "programModule");
+		for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+			Map<String, String> map = (Map<String, String>) iterator.next();
+
+			String programDescription = map.get("UpdateProgramDescription");
+			String programName = map.get("updateProgramName");
+			String programStatus = map.get("UpdateProgramStatus");
+
+			request = given().spec(requestSpecification())
+					.body(addNewProgram(programDescription, programName, programStatus))
+					.header("Authorization", "Bearer " + loginToken);
+		}
+	}
+	public void putResponseWithProgramId(String endPoint) {
+		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
+		response = request.when().put(moduleEndpoint.getEndPoint() + CommonIdHolder.getProgramId());
+	}
+	public void putRequestWithInvalidEndpoint() {
+		String invalidId="563 71";
+		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf("programInvalidEndPoint");
+		response = request.when().put(moduleEndpoint.getEndPoint()+invalidId);
+
+	}
+	public void updateWithMissingValue() throws IOException {
+		List<Map<String, String>> list = ExcelReader.getAllDataFromExcel("programBook.xlsx",
+				"MissingValueInRequestBody", "programModule");
+		for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+			Map<String, String> map = (Map<String, String>) iterator.next();
+			String programDescription = map.get("UpdateProgramDescription");
+			String programName = map.get("updateProgramName");
+			String programStatus = map.get("UpdateProgramStatus");
+			
+
+			request = given().spec(requestSpecification())
+					.body(addNewProgram(programDescription, programName, programStatus))
+					.header("Authorization", "Bearer " + loginToken);
+
+		}
+
+	}
+	public void updateWithInvalidRequestBody() throws IOException {
+		List<Map<String, String>> list = ExcelReader.getAllDataFromExcel("programBook.xlsx", "Invalid",
+				"programModule");
+		for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+			Map<String, String> map = (Map<String, String>) iterator.next();
+			String programDescription = map.get("UpdateProgramDescription");
+			String programName = map.get("updateProgramName");
+			String programStatus = map.get("UpdateProgramStatus");
+
+			request = given().spec(requestSpecification())
+					.body(addNewProgram(programDescription, programName, programStatus))
+					.header("Authorization", "Bearer " + loginToken);
+
+		}
+	}
+
+	
 }
