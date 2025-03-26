@@ -7,10 +7,11 @@ public enum ApiEndPoints {
 	getAllPrograms("/allPrograms"),
 	getAllProgramWithUsers("/allProgramsWithUsers"),
 	getProgramByProgramId("/programs/"),
-	updateprogramByprogramName("/program/{programName}"),
-	updateprogramByprogramId("/putprogram/{programId}"),
-	deleteProgramByprogramId("/deletebyprogid/{programId}"),
-	deleteProgramByprogramName("/deletebyprogname/{programName}"),
+	updateprogramByprogramName("/program/"),
+	updateprogramByprogramId("/putprogram/"),
+	deleteProgramByprogramId("/deletebyprogid/"),
+	deleteProgramByprogramName("/deletebyprogname/"),
+	programInvalidEndPoint("/saveprogramws")
     CREATEBATCH("/batches"),
     CreateBatch_invalidEndpoint("/batchesss"),
     GETALLBATCHES("/batches"),
@@ -21,9 +22,7 @@ public enum ApiEndPoints {
     UPDATEBYBATCHID("/batches/"),
     DELETEBYBATCHID("/batches/");
 
-	programInvalidEndPoint("/saveprogramws");
-
-    String endPoint;
+	String endPoint;
 
 	ApiEndPoints(String endPoint) {
 		this.endPoint = endPoint;
@@ -33,6 +32,4 @@ public enum ApiEndPoints {
 		return endPoint;
 	}
 
-
-
-    }
+}
