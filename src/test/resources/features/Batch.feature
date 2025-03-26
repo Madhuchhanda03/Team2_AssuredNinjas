@@ -61,6 +61,12 @@ Feature: Program Feature
     When Admin sends HTTPS GET Request with invalid endpoint to get all batches
     Then Admin receives 404 status with error message Not Found
 
+  Scenario: Check if admin gets 401 when retrieving all batches without Authorization
+    Given Admin creates GET Request without authorization
+    When Admin sends HTTPS Get Request to get batch without authorization
+    Then Admin receives 401 Unauthorized Status with error message
+
+
   #get batch by id
 
   Scenario: Check if admin able to retrieve a batch with valid BATCH ID
@@ -81,6 +87,28 @@ Feature: Program Feature
     Given Admin creates GET Request with valid Program Id
     When Admin sends HTTPS Request to get batch by program Id with endpoint
     Then Admin receives status code 200 OK Status with response body
+
+  #Invalid HTTP Methods for GET Endpoints
+  @NegativeGet
+  Scenario: Validate invalid HTTP methods used for GET batch endpoints
+    Given Admin prepares the following invalid method test data
+      | endpointType    | method | paramValue |
+      | getByBatchId    | POST   | 123        |
+      | getByBatchName  | PUT    | AlphaBatch |
+      | getByProgramId  | DELETE | 456        |
+    When Admin sends request to batch endpoint using invalid method
+    Then Admin receives error response with 405 or appropriate status
+
+      #Empty Values in GET Parameters
+  @NegativeGet
+  Scenario: Validate GET requests with empty or missing parameter values
+    Given Admin prepares the following invalid parameter test data
+      | endpointType    | method | paramValue |
+      | getByBatchId    | GET    |            |
+      | getByBatchName  | GET    |            |
+      | getByProgramId  | GET    |            |
+    When Admin sends request to batch endpoint with empty parameter
+    Then Admin receives error response with 400 or appropriate status
 
   #update batch by Id
 

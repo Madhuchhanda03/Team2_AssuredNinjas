@@ -20,6 +20,7 @@ import utils.ConfigReader;
 import utils.ExcelReader;
 
 public class ProgramPayload extends CommonUtils {
+	public String programName;
 	RequestSpecification request;
 	ResponseSpecification resspec;
 	public Response response;
