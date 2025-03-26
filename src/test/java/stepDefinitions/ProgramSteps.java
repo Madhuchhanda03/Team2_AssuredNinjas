@@ -143,5 +143,20 @@ public class ProgramSteps {
 		programPlayload.putRequestWithInvalidEndpoint();
 	}
 
+//*************** PUT REQUEST BY PROGRAM NAME******************
+	
 
+	@When("Admin sends HTTPS Request with invalid endpoint and invalid program name")
+	public void admin_sends_https_request_with_invalid_endpoint_and_invalid_program_name() {
+		programPlayload.putRequestWithInvalidProgramName();
+	}
+	@When("Admin sends HTTPS Request with {string} valid put program name endpoint")
+	public void admin_sends_https_request_with_valid_put_program_name_endpoint(String endpoint) {
+		programPlayload.putResponseWithProgramName(endpoint);
+	}
+	@Given("Admin creates PUT Request for the LMS API endpoints with request Body with mandatory , additional  fields")
+	public void admin_creates_put_request_for_the_lms_api_endpoints_with_request_body_with_mandatory_additional_fields()
+			throws IOException {
+		programPlayload.updateProgramWithValidNamePayload();
+	}
 }
