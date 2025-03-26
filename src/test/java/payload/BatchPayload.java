@@ -6,7 +6,6 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -18,10 +17,11 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import pojo.BatchPojo;
+import pojo.CommonIdHolder;
 import utils.CommonUtils;
 import utils.ConfigReader;
 import utils.ExcelReader;
-import payload.ProgramPayload;
+import utils.LoggerLoad;
 
 public class BatchPayload extends CommonUtils {
     public BatchPojo createdBatchPojo; //
@@ -30,7 +30,7 @@ public class BatchPayload extends CommonUtils {
     public Response response;
     public String loginToken;
     public String batchId;
-    public ProgramPayload programPayload;
+    public CommonIdHolder programPayload = new CommonIdHolder();
 
     public BatchPojo addNewBatch(String batchDescription, String batchName, String batchNoOfClasses,
                                  String batchStatus, Integer programId, String programName) {
@@ -57,8 +57,8 @@ public class BatchPayload extends CommonUtils {
     }
 
     public void createBatchFromExcel(String sheetName) throws IOException {
-        programPayload = new ProgramPayload();
-        programPayload.createNewProgramPayload();
+        //programPayload = new CommonIdHolder();
+        //programPayload.createNewProgramPayload();
         List<Map<String, String>> list = ExcelReader.getAllDataFromExcel("programBook.xlsx", "BatchModule", "BatchPostdata");
         for (Map<String, String> map : list) {
             String batchDescription = map.get("BatchDescription");
@@ -69,6 +69,7 @@ public class BatchPayload extends CommonUtils {
 //            String programName = map.get("ProgramName");
 
             // Use both programId and programName from ProgramPayload
+            LoggerLoad.info("*********** Program ID: " + programPayload.programId);
             Integer programId = Integer.parseInt(programPayload.programId);  // not static
             String programName = programPayload.programName;
             request = given()
@@ -89,8 +90,8 @@ public class BatchPayload extends CommonUtils {
     }
 
     public void createBatchWithExistingBatchName() throws IOException {
-        programPayload = new ProgramPayload();
-        programPayload.createNewProgramPayload();
+       // programPayload = new CommonIdHolder();
+       // programPayload.createNewProgramPayload();
 
         List<Map<String, String>> list = ExcelReader.getAllDataFromExcel("programBook.xlsx", "Existing Batch Info", "BatchPostdata");
 
@@ -171,8 +172,7 @@ public class BatchPayload extends CommonUtils {
     //Invalid Data
 
     public void createBatchWithInvalidDataFormat() throws IOException {
-        programPayload = new ProgramPayload();
-        programPayload.createNewProgramPayload();
+
 
         List<Map<String, String>> list = ExcelReader.getAllDataFromExcel("programBook.xlsx", "Invalid NoOfClasses Data", "BatchPostdata");
 

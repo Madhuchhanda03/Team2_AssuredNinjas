@@ -16,11 +16,9 @@ import static io.cucumber.core.internal.com.fasterxml.jackson.databind.type.Logi
 
 public class CommonUtils {
 	public static RequestSpecification request;
-<<<<<<< HEAD
+
 	public static ResponseSpecification resSpec;
-=======
-	
->>>>>>> b2027b2d750d8ad4ac8fba6f825f74862892e323
+
 
 	public RequestSpecification requestSpecification() throws IOException {
 
@@ -41,15 +39,12 @@ public class CommonUtils {
 
 	}
 
-<<<<<<< HEAD
+
 	public ResponseSpecification resSpecBuilder() {
 		resSpec = new ResponseSpecBuilder()
 				.expectContentType(ContentType.JSON)
 				.build();
 		return resSpec;
 	}
-=======
-	
 
->>>>>>> b2027b2d750d8ad4ac8fba6f825f74862892e323
 }
