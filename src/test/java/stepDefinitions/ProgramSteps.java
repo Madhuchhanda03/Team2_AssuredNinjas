@@ -8,9 +8,11 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import payload.ProgramPayload;
+import utils.CommonUtils;
 
 public class ProgramSteps {
 	ProgramPayload programPlayload;
+	CommonUtils commonUtil;
 
 	@When("Admin sets Authorization")
 	public void admin_sets_authorization() throws IOException {
@@ -53,6 +55,10 @@ public class ProgramSteps {
 	public void admin_creates_post_request_for_the_lms_with_request_body_with_missing_additional_field() throws IOException {
 		programPlayload.createProgramWithMissingValueInAdditionalField();
 	}
+	@When("Admin sends {string} HTTPS Request and  request Body with {string} valid scenario endpoint")
+	public void admin_sends_https_request_and_request_body_with_valid_scenario_endpoint(String method, String endpoint) {
+		programPlayload.validPostHttpRequest(method, endpoint);
+	}
 	
 	//*********************GET REQUEST********************************************
 	@Given("Admin creates GET Request for the LMS API")
@@ -80,6 +86,31 @@ public class ProgramSteps {
 	public void admin_creates_get_request_for_the_lms_api_without_authorization() throws IOException {
 		programPlayload.getAllProgramWithoutAuthorization();
 	}
+	//*********************GET REQUEST BY PROGRAM ID *****************************
+	
+
+	@Given("Admin creates GET Request for the LMS API with invalid baseURI")
+	public void admin_creates_get_request_for_the_lms_api_with_invalid_base_uri() throws IOException {
+		
+		programPlayload.withInvalidBaseUri();
+	}
+	@When("Admin sends HTTPS Request with {string} endpoint")
+	public void admin_sends_https_request_with_endpoint(String endpoint) {
+		programPlayload.getRequestWithInvalidProgramId(endpoint);
+	}
+	@When("Admin sends HTTPS Request with {string} invalid endpoint")
+	public void admin_send_https_request_with_invalid_endpoint(String endpoint) {
+		programPlayload.getRequestWithInvalidProgramId(endpoint); 
+	}
+	@When("Admin sends {string} HTTPS Request with {string} valid endpoint")
+	public void admin_sends_https_request_with_valid_endpoint(String method, String endpoint) {
+		programPlayload.getResponseWithProgramId(method,endpoint);
+	}
+	@Then("Admin receives {int} not found Status code")
+	public void admin_receives_not_found_status_code(int statuscode) {
+		Assert.assertEquals(programPlayload.statusCode, statuscode); 
+	}
+
 
 
 }
