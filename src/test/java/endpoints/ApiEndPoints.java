@@ -7,10 +7,10 @@ public enum ApiEndPoints {
 	getAllPrograms("/allPrograms"),
 	getAllProgramWithUsers("/allProgramsWithUsers"),
 	getProgramByProgramId("/programs/"),
-	updateprogramByprogramName("/program/{programName}"),
-	updateprogramByprogramId("/putprogram/{programId}"),
-	deleteProgramByprogramId("/deletebyprogid/{programId}"),
-	deleteProgramByprogramName("/deletebyprogname/{programName}"),
+	updateprogramByprogramName("/program/"),
+	updateprogramByprogramId("/putprogram/"),
+	deleteProgramByprogramId("/deletebyprogid/"),
+	deleteProgramByprogramName("/deletebyprogname/"),
 	programInvalidEndPoint("/saveprogramws");
 
 	String endPoint;
