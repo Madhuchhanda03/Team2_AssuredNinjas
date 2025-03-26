@@ -17,11 +17,11 @@ When Admin sets Authorization
    Then Admin receives 404 Status code
   
    
- #@tag3
-  #Scenario: Check if Admin able to create a program with already existing program name
-   #Given Admin creates POST Request for the LMS with request body
-   #When Admin sends "POST" HTTPS Request and  request Body with "addNewProgram" endpoint
- # Then Admin receives 400 Status code
+ @tag3
+  Scenario: Check if Admin able to create a program with already existing program name
+   Given Admin creates POST Request for the LMS with request body
+   When Admin sends "POST" HTTPS Request and  request Body with "addNewProgram" endpoint
+  Then Admin receives 400 Status code
   
   
  @tag4 
@@ -44,19 +44,19 @@ When Admin sets Authorization
    Then Admin receives 400 Status code
   
   
- #@tag7
-  # Scenario: Check if Admin able to create a program with missing additional field
-  # Given Admin creates POST Request for the LMS with request body with missing additional field
-  # When Admin sends "POST" HTTPS Request and  request Body with "addNewProgram" endpoint
-  # Then Admin receives 201 Status code
+ @tag7
+   Scenario: Check if Admin able to create a program with missing additional field
+   Given Admin creates POST Request for the LMS with request body with missing additional field
+  When Admin sends "POST" HTTPS Request and  request Body with "addNewProgram" endpoint
+   Then Admin receives 201 Status code
    
    ############################ GET REQUEST ALL PROGRAM #############################################
    
-   # @tag8
-  #Scenario:  Check if Admin able to retrieve all programs with valid Endpoint
-  #  Given Admin creates GET Request for the LMS API
-  #  When Admin sends "GET" HTTPS Request with "getAllPrograms" endpoint
-  # Then Admin receives 200 Status code  
+    @tag8
+  Scenario:  Check if Admin able to retrieve all programs with valid Endpoint
+    Given Admin creates GET Request for the LMS API
+   When Admin sends "GET" HTTPS Request with "getAllPrograms" endpoint
+   Then Admin receives 200 Status code  
     
    @tag9
   Scenario:  Check if Admin able to retrieve all programs with invalid Endpoint
@@ -106,11 +106,11 @@ When Admin sets Authorization
   
   ############################ GET ALL PROGRAM WITH ADMIN #################################################
   
- # @tag16
- #Scenario:  Check if Admin able to retrieve all programs with valid Endpoint
- #When Admin creates GET Request for the LMS API
- #When Admin sends "GET" HTTPS Request with "getAllProgramWithUsers" endpoint
- #Then Admin receives 200 Status code
+  @tag16
+ Scenario:  Check if Admin able to retrieve all programs with valid Endpoint
+ When Admin creates GET Request for the LMS API
+ When Admin sends "GET" HTTPS Request with "getAllProgramWithUsers" endpoint
+ Then Admin receives 200 Status code
  
  
  @tag17
