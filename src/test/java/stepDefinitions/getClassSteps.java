@@ -94,4 +94,27 @@ public class getClassSteps{
 	public void admin_creates_get_request_to_retrieve_all_classes_with_invalid_batch_id_for_the_lms_class_api_module() throws IOException {
 		getClassPayload.ClassGetAllRequest();
 	}
+	
+	//##########Get all recordings with StaffId#########
+	@Given("Admin creates GET Request for allclasses with valid StaffId for the LMS ClassApi module")
+	public void admin_creates_get_request_for_allclasses_with_valid_staff_id_for_the_lms_class_api_module() throws IOException {
+		getClassPayload.ClassGetAllRequest();
+	}
+	
+
+   @Given("Admin creates GET Request to retrieve all classes with invalid StaffId for the LMS ClassApi module")
+   public void admin_creates_get_request_to_retrieve_all_classes_with_invalid_staff_id_for_the_lms_class_api_module() throws IOException {
+	   getClassPayload.ClassGetAllRequest();
+  }
+   
+   //################Get recording with ClassId#######
+   @Given("Admin creates GET Request for class recordings with valid Class Id for the LMS ClassApi module")
+   public void admin_creates_get_request_for_class_recordings_with_valid_class_id_for_the_lms_class_api_module() throws IOException {
+	   getClassPayload.ClassGetAllRequest();
+   }
+
+  @Given("Admin creates GET Request to retrieve all classes with invalid ClassId for the LMS ClassApi module")
+  public void admin_creates_get_request_to_retrieve_all_classes_with_invalid_class_id_for_the_lms_class_api_module() throws IOException {
+	  getClassPayload.ClassGetAllRequest();
+  }
 }

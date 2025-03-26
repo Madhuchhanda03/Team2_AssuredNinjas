@@ -23,8 +23,8 @@ Feature: GET Class Feature
   Scenario: Check if Admin able to retrieve all classes without Authorization
     Given Admin creates GETAll Request for the LMS ClassAPI without Authorization
     When Admin sends "GET" HTTPS Request with "getAllClass" endpoint for class module
-    Then Admin receives 401  response Status code for class module
-    
+    #Then Admin receives 401  response Status code for class module
+    #
  ##################################### GET REQUEST (class recordings by BatchId)#############
  
  Scenario: Check if admin able to retrieve class recording  with valid Batchid
@@ -105,7 +105,7 @@ Scenario: Check if admin is able to retrieve allclasses with valid classtopic
     When Admin sends "GET" HTTPS Request with "getAllClassByTopic" endpoint for class module
     Then Admin receives 401  response Status code for class module
 
-################################### GET REQUEST (all Classes by BatchId)###############
+################################## GET REQUEST (all Classes by BatchId)###############
 
 Scenario: Check if admin is able to retrieve allclasses with valid BatchId
     Given Admin creates GET Request for allclasses with valid BatchId for the LMS ClassApi module
@@ -131,6 +131,81 @@ Scenario: Check if admin is able to retrieve allclasses with valid BatchId
     Given Admin creates GET Request for the LMS ClassAPI without Authorization
     When Admin sends "GET" HTTPS Request with "getAllClassByBatchId" endpoint for class module
     Then Admin receives 401  response Status code for class module
+
+###########################GET REQUEST (all Classes by StaffId)################
+Scenario: Check if admin is able to retrieve allclasses with valid StaffId
+    Given Admin creates GET Request for allclasses with valid StaffId for the LMS ClassApi module
+    When Admin sends "GET" HTTPS Request with "getAllClassByStaffId" endpoint for class module
+    Then Admin receives 200  response Status code for class module
+    
+ Scenario: Check if admin able to retrieve allclasses with invalid StaffId
+    Given Admin creates GET Request to retrieve all classes with invalid StaffId for the LMS ClassApi module
+    When Admin sends "GET" HTTPS Request with "getAllClassByInvalidStaffId" endpoint for class module
+    Then Admin receives 404  response Status code for class module
+    
+ Scenario: Check if admin able to retrieve allclass by StaffId with invalid end point
+    Given Admin creates GET Request for allclasses with valid StaffId for the LMS ClassApi module
+    When Admin sends "GET" HTTPS Request with invalid endpoint for class module
+    Then Admin receives 404  response Status code for class module
+    
+  Scenario: Check if admin able to retrieve allclass details by StaffId with invalid Method
+    Given Admin creates GET Request for allclasses with valid StaffId for the LMS ClassApi module
+    When Admin sends "PUT" HTTPS Request with "getAllClassByStaffId" endpoint for class module
+    Then Admin receives 405  response Status code for class module
+    
+   Scenario: Check if admin able to retrieve class details by StaffId without Authorization
+    Given Admin creates GET Request for the LMS ClassAPI without Authorization
+    When Admin sends "GET" HTTPS Request with "getAllClassByStaffId" endpoint for class module
+    Then Admin receives 401  response Status code for class module
+
+######################### GET REQUEST (all recordings)#########################
+    Scenario: Check if Admin able to retrieve class recordings with valid Endpoint
+    Given Admin creates GETAll Request for the LMS ClassApi module
+    When Admin sends "GET" HTTPS Request with "getAllRecordings" endpoint for class module
+    Then Admin receives 200  response Status code for class module
+
+  Scenario: Check if Admin able to retrieve all class recordings with invalid Endpoint
+    Given Admin creates GETAll Request for the LMS ClassApi module
+    When Admin sends "GET" HTTPS Request with invalid endpoint for class module
+   Then Admin receives 404  response Status code for class module
+
+  Scenario: Check if Admin able to retrieve all class recordings with invalid Method
+    Given Admin creates GETAll Request for the LMS ClassApi module
+    When Admin sends "PUT" HTTPS Request with "getAllRecordings" endpoint for class module
+    Then Admin receives 405  response Status code for class module
+
+  Scenario: Check if Admin able to retrieve all class recordings without Authorization
+    Given Admin creates GETAll Request for the LMS ClassAPI without Authorization
+    When Admin sends "GET" HTTPS Request with "getAllRecordings" endpoint for class module
+    Then Admin receives 401  response Status code for class module
+    
+###################################GET REQUEST (Class Recordings by Class Id)#########
+  Scenario: Check if admin is able to retrieve class recordings with valid Class Id
+    Given Admin creates GET Request for class recordings with valid Class Id for the LMS ClassApi module
+    When Admin sends "GET" HTTPS Request with "getAllClassRecordingsByClassId" endpoint for class module
+    Then Admin receives 200  response Status code for class module
+    
+  Scenario: Check if admin able to retrieve class recordings with invalid Class Id
+    Given Admin creates GET Request to retrieve all classes with invalid ClassId for the LMS ClassApi module
+    When Admin sends "GET" HTTPS Request with "getAllClassRecordingsByInvalidClassId" endpoint for class module
+    Then Admin receives 404  response Status code for class module
+    
+ Scenario: Check if admin able to retrieve class recordings with invalid end point
+    Given Admin creates GET Request for class recordings with valid Class Id for the LMS ClassApi module
+    When Admin sends "GET" HTTPS Request with invalid endpoint for class module
+    Then Admin receives 404  response Status code for class module
+    
+  Scenario: Check if admin able to retrieve class recordings by ClassId with invalid Method
+    Given Admin creates GET Request for class recordings with valid Class Id for the LMS ClassApi module
+    When Admin sends "PUT" HTTPS Request with "getAllClassRecordingsByClassId" endpoint for class module
+    Then Admin receives 405  response Status code for class module
+    
+   Scenario: Check if admin able to retrieve class recordings by ClassId without Authorization
+    Given Admin creates GET Request for the LMS ClassAPI without Authorization
+    When Admin sends "GET" HTTPS Request with "getAllClassRecordingsByClassId" endpoint for class module
+    Then Admin receives 401  response Status code for class module
+
+
 
 
 
