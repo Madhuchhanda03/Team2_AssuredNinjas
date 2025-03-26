@@ -11,7 +11,7 @@ public enum ApiEndPoints {
 	updateprogramByprogramId("/putprogram/"),
 	deleteProgramByprogramId("/deletebyprogid/"),
 	deleteProgramByprogramName("/deletebyprogname/"),
-	programInvalidEndPoint("/saveprogramws")
+	programInvalidEndPoint("/saveprogramws"),
     CREATEBATCH("/batches"),
     CreateBatch_invalidEndpoint("/batchesss"),
     GETALLBATCHES("/batches"),
