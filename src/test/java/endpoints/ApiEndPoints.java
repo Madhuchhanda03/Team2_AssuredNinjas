@@ -11,8 +11,6 @@ public enum ApiEndPoints {
 	updateprogramByprogramId("/putprogram/{programId}"),
 	deleteProgramByprogramId("/deletebyprogid/{programId}"),
 	deleteProgramByprogramName("/deletebyprogname/{programName}"),
-<<<<<<< HEAD
-	programInvalidEndPoint("/saveprogramjava"),
     CREATEBATCH("/batches"),
     CreateBatch_invalidEndpoint("/batchesss"),
     GETALLBATCHES("/batches"),
@@ -22,9 +20,8 @@ public enum ApiEndPoints {
     GETBATCHBYPROGRAMID("/batches/program/"),
     UPDATEBYBATCHID("/batches/"),
     DELETEBYBATCHID("/batches/");
-=======
+
 	programInvalidEndPoint("/saveprogramws");
->>>>>>> b2027b2d750d8ad4ac8fba6f825f74862892e323
 
     String endPoint;
 
