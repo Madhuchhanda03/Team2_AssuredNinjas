@@ -6,14 +6,14 @@ public enum ApiEndPoints {
 	addNewProgram("/saveprogram"),
 	getAllPrograms("/allPrograms"),
 	getAllProgramWithUsers("/allProgramsWithUsers"),
-	getProgramByProgramId("/programs/{programId}"),
-	updateprogramByprogramName("/program/{programName}"),
-	updateprogramByprogramId("/putprogram/{programId}"),
-	deleteProgramByprogramId("/deletebyprogid/{programId}"),
-	deleteProgramByprogramName("/deletebyprogname/{programName}"),
-	programInvalidEndPoint("/saveprogramjava"),
-	
-	//addNewClass("/CreateClassSchedule "),
+	getProgramByProgramId("/programs/"),
+	updateprogramByprogramName("/program/"),
+	updateprogramByprogramId("/putprogram/"),
+	deleteProgramByprogramId("/deletebyprogid/"),
+	deleteProgramByprogramName("/deletebyprogname/"),
+	programInvalidEndPoint("/saveprogramws"),
+  
+  	//addNewClass("/CreateClassSchedule "),
 	getAllClass("/allClasses "),
 	getAllUpcomingClassByStudentId("/upcomingClasses/{studentID}"),
 	getClassRecordingsByBatchId("/batchRecordings/9477"),
@@ -32,6 +32,8 @@ public enum ApiEndPoints {
 	getAllClassByInvalidStaffId("/classesByStaff/A61"),
 	getClassInvalidEndPoint("/allClasse ");
 	
+
+  
 	String endPoint;
 
 	ApiEndPoints(String endPoint) {

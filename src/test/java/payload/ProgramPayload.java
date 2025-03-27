@@ -2,6 +2,7 @@ package payload;
 
 import static io.restassured.RestAssured.given;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,9 +15,11 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
+import pojo.CommonIdHolder;
 import pojo.ProgramPojo;
 import utils.CommonUtils;
 import utils.ConfigReader;
+
 import utils.ExcelReader;
 
 public class ProgramPayload extends CommonUtils {
@@ -24,7 +27,10 @@ public class ProgramPayload extends CommonUtils {
 	ResponseSpecification resspec;
 	public Response response;
 	public static String loginToken;
-	public String programId;
+
+
+	public static int statusCode;
+
 
 	public ProgramPojo addNewProgram(String programDescription, String programName, String programStatus) {
 		ProgramPojo programPojo = new ProgramPojo();
@@ -55,7 +61,6 @@ public class ProgramPayload extends CommonUtils {
 			String programDescription = map.get("programDescription");
 			String programName = map.get("programName");
 			String programStatus = map.get("programStatus");
-			
 
 			request = given().spec(requestSpecification())
 					.body(addNewProgram(programDescription, programName, programStatus))
@@ -69,20 +74,39 @@ public class ProgramPayload extends CommonUtils {
 
 	}
 
+	public void validPostHttpRequest(String method, String endPoint) {
+
+		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
+		response = request.when().post(moduleEndpoint.getEndPoint());
+		String id = response.jsonPath().getString("programId");
+		// String proName=response.jsonPath().getString("programName");
+		CommonIdHolder.setProgramId(id);
+		// CommonIdHolder.setProgramName(proName);
+	}
+
 	public void ProgramResponse(String method, String endPoint) {
 		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
 
 		if (method.equalsIgnoreCase("POST")) {
 			response = request.when().post(moduleEndpoint.getEndPoint());
-			programId = response.jsonPath().getString("programId");
+			if(response!=null) {
+				String proName = response.jsonPath().getString("programName");
+				CommonIdHolder.setProgramName(proName);
+				}
+
 		} else if (method.equalsIgnoreCase("PUT")) {
-			response = request.when().put(moduleEndpoint.getEndPoint());
-			programId = response.jsonPath().getString("programId");
+			response = request.when().put(moduleEndpoint.getEndPoint() + CommonIdHolder.getProgramId());
+
 		} else if (method.equalsIgnoreCase("GET"))
 			response = request.when().get(moduleEndpoint.getEndPoint());
 		else if (method.equalsIgnoreCase("DELETE"))
-			response = request.when().delete(moduleEndpoint.getEndPoint() + "/" + programId);
+			response = request.when().delete(moduleEndpoint.getEndPoint());
 
+	}
+
+	public void getResponseWithProgramId(String method, String endPoint) {
+		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
+		response = request.when().get(moduleEndpoint.getEndPoint() + CommonIdHolder.getProgramId());
 	}
 
 	public void createProgramWithInvalidRequestBody() throws IOException {
@@ -93,7 +117,6 @@ public class ProgramPayload extends CommonUtils {
 			String programDescription = map.get("programDescription");
 			String programName = map.get("programName");
 			String programStatus = map.get("programStatus");
-			;
 
 			request = given().spec(requestSpecification())
 					.body(addNewProgram(programDescription, programName, programStatus))
@@ -110,7 +133,6 @@ public class ProgramPayload extends CommonUtils {
 			String programDescription = map.get("programDescription");
 			String programName = map.get("programName");
 			String programStatus = map.get("programStatus");
-			;
 
 			request = given().spec(requestSpecification())
 					.body(addNewProgram(programDescription, programName, programStatus))
@@ -128,7 +150,6 @@ public class ProgramPayload extends CommonUtils {
 			String programDescription = map.get("programDescription");
 			String programName = map.get("programName");
 			String programStatus = map.get("programStatus");
-			;
 
 			request = given().spec(requestSpecification())
 					.body(addNewProgram(programDescription, programName, programStatus))
@@ -140,16 +161,137 @@ public class ProgramPayload extends CommonUtils {
 
 	// **************************GET REQUEST************************
 	public void programGetRequest() throws IOException {
-		request = given().spec(requestSpecification())
-				.header("Authorization", "Bearer " + loginToken);
+		request = given().spec(requestSpecification()).header("Authorization", "Bearer " + loginToken);
 	}
+
 	public void getAllProgramWithoutAuthorization() throws IOException {
 		request = given().spec(requestSpecification());
-		
+
 	}
+
 	public void getRequestWithInvalidEndpoint() {
 		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf("programInvalidEndPoint");
 		response = request.when().get(moduleEndpoint.getEndPoint());
 
 	}
+	// *******************GET REQUEST WITH PROGRAM ID *******************
+
+	public void getRequestWithInvalidProgramId(String endPoint) {
+		String invalidProgramId = "5432 11";
+		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
+		response = request.when().get(moduleEndpoint.getEndPoint() + invalidProgramId);
+	}
+
+	public void withInvalidBaseUri() throws FileNotFoundException {
+
+		Response getResponse = given().baseUri("https://lms-hackthon-feb25-fbe.herokuapp.com")
+				.contentType(ContentType.JSON).header("Authorization", "Bearer " + loginToken).when().get("/programs/");
+		statusCode = getResponse.getStatusCode();
+
+	}
+
+	// ************** PUT REQUEST BY PROGRAM ID ****************************
+	public void updateProgramWithValidPayload() throws IOException {
+		List<Map<String, String>> list = ExcelReader.getAllDataFromExcel("programBook.xlsx", "Valid", "programModule");
+		for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+			Map<String, String> map = (Map<String, String>) iterator.next();
+
+			String programDescription = map.get("UpdateProgramDescription");
+			String programName = map.get("updateProgramName");
+			String programStatus = map.get("UpdateProgramStatus");
+
+			request = given().spec(requestSpecification())
+					.body(addNewProgram(programDescription, programName, programStatus))
+					.header("Authorization", "Bearer " + loginToken);
+		}
+	}
+
+	public void putResponseWithProgramId(String endPoint) {
+		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
+		response = request.when().put(moduleEndpoint.getEndPoint() + CommonIdHolder.getProgramId());
+		
+	}
+
+	public void putRequestWithInvalidEndpoint() {
+		String invalidId = "563 71";
+		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf("programInvalidEndPoint");
+		response = request.when().put(moduleEndpoint.getEndPoint() + invalidId);
+
+	}
+
+	public void updateWithMissingValue() throws IOException {
+		List<Map<String, String>> list = ExcelReader.getAllDataFromExcel("programBook.xlsx",
+				"MissingValueInRequestBody", "programModule");
+		for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+			Map<String, String> map = (Map<String, String>) iterator.next();
+			String programDescription = map.get("UpdateProgramDescription");
+			String programName = map.get("updateProgramName");
+			String programStatus = map.get("UpdateProgramStatus");
+
+			request = given().spec(requestSpecification())
+					.body(addNewProgram(programDescription, programName, programStatus))
+					.header("Authorization", "Bearer " + loginToken);
+
+		}
+
+	}
+
+	public void updateWithInvalidRequestBody() throws IOException {
+		List<Map<String, String>> list = ExcelReader.getAllDataFromExcel("programBook.xlsx", "Invalid",
+				"programModule");
+		for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+			Map<String, String> map = (Map<String, String>) iterator.next();
+			String programDescription = map.get("UpdateProgramDescription");
+			String programName = map.get("updateProgramName");
+			String programStatus = map.get("UpdateProgramStatus");
+
+			request = given().spec(requestSpecification())
+					.body(addNewProgram(programDescription, programName, programStatus))
+					.header("Authorization", "Bearer " + loginToken);
+
+		}
+	}
+
+	public void putRequestWithInvalidProgramName() {
+		String invalidName = "envy s5";
+		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf("programInvalidEndPoint");
+		response = request.when().put(moduleEndpoint.getEndPoint() + invalidName);
+
+	}
+
+	public void putResponseWithProgramName(String endPoint) {
+		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
+		response = request.when().put(moduleEndpoint.getEndPoint() + CommonIdHolder.getProgramName());
+		 String proName=response.jsonPath().getString("programName");
+		 CommonIdHolder.setUpdatedProgram(proName);
+	}
+	public void updateProgramWithValidNamePayload() throws IOException {
+		List<Map<String, String>> list = ExcelReader.getAllDataFromExcel("programBook.xlsx", "updateNamePayload", "programModule");
+		for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+			Map<String, String> map = (Map<String, String>) iterator.next();
+
+			String programDescription = map.get("UpdateProgramDescription");
+			String programName = map.get("updateProgramName");
+			String programStatus = map.get("UpdateProgramStatus");
+
+			request = given().spec(requestSpecification())
+					.body(addNewProgram(programDescription, programName, programStatus))
+					.header("Authorization", "Bearer " + loginToken);
+		}
+	}
+public void deleteByprogramName() throws IOException {
+	request = given().spec(requestSpecification()).header("Authorization", "Bearer " + loginToken);;
+	
+}
+public void deleteResponseWithProgramName(String endPoint) {
+	ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
+	response = request.when().delete(moduleEndpoint.getEndPoint() + CommonIdHolder.getUpdatedProgram());
+	
+}
+public void deleteResponseWithProgramId(String endPoint) {
+	ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
+	response = request.when().delete(moduleEndpoint.getEndPoint() + CommonIdHolder.getProgramId());
+	
+}
+
 }
