@@ -89,12 +89,9 @@ public class BatchPayload extends CommonUtils {
 
             // store created POJO for chaining
             createdBatchPojo = response.as(BatchPojo.class);
-            //LoggerLoad.info("Batch ID: " + response.getStatusCode() + "  " + response.getBody());
-
-            // Log status code and full response body
             LoggerLoad.info("Status Code: " + response.getStatusCode());
             LoggerLoad.info("Response Body:\n" + response.getBody().asPrettyString());
-            //batchId = createdBatchPojo.getBatchId().toString(); // safe conversion
+            batchId = createdBatchPojo.getBatchId().toString(); // safe conversion
 
         }
     }
