@@ -1,7 +1,5 @@
 package payload;
 
-import static io.restassured.RestAssured.given;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +9,6 @@ import io.restassured.specification.ResponseSpecification;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import endpoints.ApiEndPoints;
-import hooks.Hook;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
