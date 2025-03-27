@@ -12,6 +12,7 @@ public enum ApiEndPoints {
 	deleteProgramByprogramId("/deletebyprogid/"),
 	deleteProgramByprogramName("/deletebyprogname/"),
 	programInvalidEndPoint("/saveprogramws"),
+	createNewBatch("/batches"),
   
   	//addNewClass("/CreateClassSchedule "),
 	getAllClass("/allClasses "),

@@ -1,5 +1,5 @@
 
-@tag
+@tagprogram
 Feature: Program Feature
 Background:
 When Admin sets Authorization
