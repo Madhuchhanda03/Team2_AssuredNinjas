@@ -33,7 +33,7 @@ public class BatchPayload extends CommonUtils {
     //public CommonIdHolder programPayload = new CommonIdHolder();
 
     public BatchPojo addNewBatch(String batchDescription, String batchName, String batchNoOfClasses,
-                                 String batchStatus, Integer programId) {
+                                 String batchStatus, int programId) {
         BatchPojo batchPojo = new BatchPojo();
         batchPojo.setBatchDescription(batchDescription);
         batchPojo.setBatchName(batchName);
@@ -64,13 +64,10 @@ public class BatchPayload extends CommonUtils {
             CommonIdHolder.setProgramName("HardcodedProgram"); // <-- Hardcoded Program Name
           //  throw new IllegalStateException("Program ID or Program Name not set in CommonIdHolder. Ensure program is created before calling this.");
         }
-
         String programIdStr = CommonIdHolder.getProgramId();
-        String programName = CommonIdHolder.getProgramName();
-
         LoggerLoad.info("*********** Program ID: " + programIdStr);
 
-        Integer programId = Integer.parseInt(programIdStr);
+        int programId = Integer.parseInt(programIdStr);
 
         List<Map<String, String>> list = ExcelReader.getAllDataFromExcel("programBook.xlsx", "BatchModule", "BatchPostdata");
         System.out.println("List: ********************************" + list);

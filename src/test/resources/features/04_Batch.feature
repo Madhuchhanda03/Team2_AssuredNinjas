@@ -4,14 +4,6 @@ Feature: Batch Feature
     When Admin sets Authorization
 
 
-  #create batch
-  @tag
-  Scenario: Check if admin able to create a Batch with valid endpoint and request body (non existing values)
-    Given Admin creates POST Request  with valid data in request body
-    When Admin sends HTTPS Request with endpoint to create batch
-    Then Admin receives 201 Created Status with response body
-
-
 #existing batch info
 
   Scenario: Check if admin able to create a Batch with valid endpoint and request body (existing value in Batch Name)

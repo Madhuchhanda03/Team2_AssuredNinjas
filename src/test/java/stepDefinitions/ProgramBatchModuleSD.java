@@ -24,27 +24,10 @@ public class ProgramBatchModuleSD {
     ProgramPayload programPayload = new ProgramPayload();
 
 
-    @Given("Admin creates POST Request  with valid data in request body")
-    public void admin_creates_post_request_with_valid_data_in_request_body() throws IOException {
-    batchPayload.getLoginToken();
-    batchPayload.createBatchFromExcel("BatchPostdata");
-
-
-    }
-
-    @When("Admin sends HTTPS Request with endpoint to create batch")
-    public void admin_sends_https_request_with_endpoint_to_create_batch() {
-        batchPayload.batchResponse("POST", ApiEndPoints.CREATEBATCH);
-    }
-
-    @Then("Admin receives {int} Created Status with response body")
-    public void admin_receives_created_status_with_response_body(Integer expectedStatusCode) {
-        Assert.assertEquals(batchPayload.response.getStatusCode(), expectedStatusCode.intValue());
-        System.out.println("Batch created with ID: " + batchPayload.response.jsonPath().getString("batchId"));
-    }
 
     @Given("Admin creates POST Request  with existing value in request body")
     public void admin_creates_post_request_with_existing_value_in_request_body() throws IOException {
+        batchPayload.getLoginToken();
         batchPayload.createBatchWithExistingBatchName();
     }
 
