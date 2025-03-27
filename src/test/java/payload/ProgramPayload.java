@@ -19,7 +19,6 @@ import pojo.CommonIdHolder;
 import pojo.ProgramPojo;
 import utils.CommonUtils;
 import utils.ConfigReader;
-
 import utils.ExcelReader;
 
 public class ProgramPayload extends CommonUtils {
@@ -76,9 +75,8 @@ public class ProgramPayload extends CommonUtils {
 		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
 		response = request.when().post(moduleEndpoint.getEndPoint());
 		String id = response.jsonPath().getString("programId");
-		// String proName=response.jsonPath().getString("programName");
 		CommonIdHolder.setProgramId(id);
-		// CommonIdHolder.setProgramName(proName);
+		
 	}
 
 	public void ProgramResponse(String method, String endPoint) {
@@ -86,10 +84,10 @@ public class ProgramPayload extends CommonUtils {
 
 		if (method.equalsIgnoreCase("POST")) {
 			response = request.when().post(moduleEndpoint.getEndPoint());
-			if(response!=null) {
+			if (response != null) {
 				String proName = response.jsonPath().getString("programName");
 				CommonIdHolder.setProgramName(proName);
-				}
+			}
 
 		} else if (method.equalsIgnoreCase("PUT")) {
 			response = request.when().put(moduleEndpoint.getEndPoint() + CommonIdHolder.getProgramId());
@@ -206,7 +204,7 @@ public class ProgramPayload extends CommonUtils {
 	public void putResponseWithProgramId(String endPoint) {
 		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
 		response = request.when().put(moduleEndpoint.getEndPoint() + CommonIdHolder.getProgramId());
-		
+
 	}
 
 	public void putRequestWithInvalidEndpoint() {
@@ -259,11 +257,13 @@ public class ProgramPayload extends CommonUtils {
 	public void putResponseWithProgramName(String endPoint) {
 		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
 		response = request.when().put(moduleEndpoint.getEndPoint() + CommonIdHolder.getProgramName());
-		 String proName=response.jsonPath().getString("programName");
-		 CommonIdHolder.setUpdatedProgram(proName);
+		String proName = response.jsonPath().getString("programName");
+		CommonIdHolder.setUpdatedProgram(proName);
 	}
+
 	public void updateProgramWithValidNamePayload() throws IOException {
-		List<Map<String, String>> list = ExcelReader.getAllDataFromExcel("programBook.xlsx", "updateNamePayload", "programModule");
+		List<Map<String, String>> list = ExcelReader.getAllDataFromExcel("programBook.xlsx", "updateNamePayload",
+				"programModule");
 		for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 			Map<String, String> map = (Map<String, String>) iterator.next();
 
@@ -276,19 +276,23 @@ public class ProgramPayload extends CommonUtils {
 					.header("Authorization", "Bearer " + loginToken);
 		}
 	}
-public void deleteByprogramName() throws IOException {
-	request = given().spec(requestSpecification()).header("Authorization", "Bearer " + loginToken);;
-	
-}
-public void deleteResponseWithProgramName(String endPoint) {
-	ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
-	response = request.when().delete(moduleEndpoint.getEndPoint() + CommonIdHolder.getUpdatedProgram());
-	
-}
-public void deleteResponseWithProgramId(String endPoint) {
-	ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
-	response = request.when().delete(moduleEndpoint.getEndPoint() + CommonIdHolder.getProgramId());
-	
-}
+
+	public void deleteByprogramName() throws IOException {
+		request = given().spec(requestSpecification()).header("Authorization", "Bearer " + loginToken);
+		;
+
+	}
+
+	public void deleteResponseWithProgramName(String endPoint) {
+		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
+		response = request.when().delete(moduleEndpoint.getEndPoint() + CommonIdHolder.getUpdatedProgram());
+
+	}
+
+	public void deleteResponseWithProgramId(String endPoint) {
+		ApiEndPoints moduleEndpoint = ApiEndPoints.valueOf(endPoint);
+		response = request.when().delete(moduleEndpoint.getEndPoint() + CommonIdHolder.getProgramId());
+
+	}
 
 }
