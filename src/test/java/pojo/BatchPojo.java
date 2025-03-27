@@ -1,13 +1,27 @@
 package pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BatchPojo {
+
     private String batchName;
     private String batchDescription;
     private String batchNoOfClasses;
     private String batchStatus;
     private Integer programId;
     private Integer batchId;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String programName;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String message;
+
+    // Getters & Setters
 
     public String getBatchName() {
         return batchName;
@@ -63,5 +77,13 @@ public class BatchPojo {
 
     public void setProgramName(String programName) {
         this.programName = programName;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

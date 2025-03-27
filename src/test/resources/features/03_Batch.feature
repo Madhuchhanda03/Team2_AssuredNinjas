@@ -1,5 +1,5 @@
 @tag
-Feature: Program Feature
+Feature: Batch Feature
   Background:
     When Admin sets Authorization
 

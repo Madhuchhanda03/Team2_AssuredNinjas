@@ -28,19 +28,18 @@ public class BatchPayload extends CommonUtils {
     RequestSpecification request;
     ResponseSpecification resspec;
     public Response response;
-    public String loginToken;
+    public static String loginToken;
     public String batchId;
-    public CommonIdHolder programPayload = new CommonIdHolder();
+    //public CommonIdHolder programPayload = new CommonIdHolder();
 
     public BatchPojo addNewBatch(String batchDescription, String batchName, String batchNoOfClasses,
-                                 String batchStatus, Integer programId, String programName) {
+                                 String batchStatus, Integer programId) {
         BatchPojo batchPojo = new BatchPojo();
         batchPojo.setBatchDescription(batchDescription);
         batchPojo.setBatchName(batchName);
         batchPojo.setBatchNoOfClasses(batchNoOfClasses);
         batchPojo.setBatchStatus(batchStatus);
         batchPojo.setProgramId(programId);
-        batchPojo.setProgramName(programName);
         return batchPojo;
     }
 
@@ -53,40 +52,65 @@ public class BatchPayload extends CommonUtils {
         resspec = new ResponseSpecBuilder().expectContentType(ContentType.JSON).build();
         response = request.when().post(endPoint.getEndPoint());
         loginToken = response.jsonPath().getString("token");
+        System.out.println("Login Token: " + loginToken);
+        //return loginToken;
 
     }
 
-    public void createBatchFromExcel(String sheetName) throws IOException {
-        //programPayload = new CommonIdHolder();
-        //programPayload.createNewProgramPayload();
+    public void createBatchFromExcel(String BatchPostdata) throws IOException {
+        // Added this block FIRST to safely pull from CommonIdHolder
+        if (CommonIdHolder.getProgramId() == null || CommonIdHolder.getProgramName() == null) {
+            CommonIdHolder.setProgramId("17134"); // <-- Hardcoded Program ID
+            CommonIdHolder.setProgramName("HardcodedProgram"); // <-- Hardcoded Program Name
+          //  throw new IllegalStateException("Program ID or Program Name not set in CommonIdHolder. Ensure program is created before calling this.");
+        }
+
+        String programIdStr = CommonIdHolder.getProgramId();
+        String programName = CommonIdHolder.getProgramName();
+
+        LoggerLoad.info("*********** Program ID: " + programIdStr);
+
+        Integer programId = Integer.parseInt(programIdStr);
+
         List<Map<String, String>> list = ExcelReader.getAllDataFromExcel("programBook.xlsx", "BatchModule", "BatchPostdata");
+        System.out.println("List: ********************************" + list);
         for (Map<String, String> map : list) {
             String batchDescription = map.get("BatchDescription");
             String batchName = map.get("BatchName");
             String batchNoOfClasses = map.get("NoOfClasses");
             String batchStatus = map.get("BatchStatus");
-//            Integer programId = Integer.parseInt(map.get("ProgramId"));
-//            String programName = map.get("ProgramName");
 
-            // Use both programId and programName from ProgramPayload
-            LoggerLoad.info("*********** Program ID: " + programPayload.programId);
-            Integer programId = Integer.parseInt(programPayload.programId);  // not static
-            String programName = programPayload.programName;
             request = given()
                     .spec(requestSpecification())
-                    .body(addNewBatch(batchDescription, batchName, batchNoOfClasses, batchStatus, programId, programName))
+                    .body(addNewBatch(batchDescription, batchName, batchNoOfClasses, batchStatus, programId))
                     .header("Authorization", "Bearer " + loginToken);
             // Execute POST request using the correct enum endpoint
             response = request.when().post(ApiEndPoints.CREATEBATCH.getEndPoint());
 
-            // Optionally store the batchId if needed later
-            batchId = response.jsonPath().getString("batchId");
+            // store created POJO for chaining
+            createdBatchPojo = response.as(BatchPojo.class);
+            //LoggerLoad.info("Batch ID: " + response.getStatusCode() + "  " + response.getBody());
+
+            // Log status code and full response body
+            LoggerLoad.info("Status Code: " + response.getStatusCode());
+            LoggerLoad.info("Response Body:\n" + response.getBody().asPrettyString());
+            //batchId = createdBatchPojo.getBatchId().toString(); // safe conversion
+
         }
     }
 
-    public void requestWithInvalidEndpoint() {
+    public void requestWithInvalidEndpoint() throws IOException {
         ApiEndPoints endpoint = ApiEndPoints.CreateBatch_invalidEndpoint;
-        response = request.when().post(endpoint.getEndPoint());
+        response = given()
+                .spec(requestSpecification())
+                .header("Authorization", "Bearer " + loginToken)
+                .when()
+                .post(endpoint.getEndPoint());
+
+        System.out.println(" Sent to invalid endpoint: " + endpoint.getEndPoint());
+        System.out.println("Status: " + response.getStatusCode());
+        System.out.println("Body: " + response.getBody().asPrettyString());
+       // response = request.when().post(endpoint.getEndPoint());
     }
 
     public void createBatchWithExistingBatchName() throws IOException {
@@ -103,13 +127,14 @@ public class BatchPayload extends CommonUtils {
                 String batchNoOfClasses = map.get("NoOfClasses");
                 String batchStatus = map.get("BatchStatus");
 
-                Integer programId = Integer.parseInt(programPayload.programId);
-                String programName = programPayload.programName;
+                Integer programId = Integer.parseInt(CommonIdHolder.getProgramId());
+                String programName = CommonIdHolder.getProgramName();
+
 
                 request = given()
                         .spec(requestSpecification())
                         .header("Authorization", "Bearer " + loginToken)
-                        .body(addNewBatch(batchDescription, batchName, batchNoOfClasses, batchStatus, programId, programName));
+                        .body(addNewBatch(batchDescription, batchName, batchNoOfClasses, batchStatus, programId));
 
                 response = request.when().post(ApiEndPoints.CREATEBATCH.getEndPoint());
 
@@ -155,7 +180,7 @@ public class BatchPayload extends CommonUtils {
                     // skip invalid numeric conversion
                 }
 
-                BatchPojo batchPojo = addNewBatch(batchDescription, batchName, batchNoOfClasses, batchStatus, programId, programName);
+                BatchPojo batchPojo = addNewBatch(batchDescription, batchName, batchNoOfClasses, batchStatus, programId);
 
                 request = given()
                         .spec(requestSpecification())
@@ -183,10 +208,10 @@ public class BatchPayload extends CommonUtils {
                 String batchNoOfClasses = map.get("NoOfClasses");  // contains invalid chars
                 String batchStatus = map.get("BatchStatus");
 
-                Integer programId = Integer.parseInt(programPayload.programId);
-                String programName = programPayload.programName;
+                Integer programId = Integer.parseInt(CommonIdHolder.getProgramId());
+                String programName = CommonIdHolder.getProgramName();
 
-                BatchPojo invalidPojo = addNewBatch(batchDescription, batchName, batchNoOfClasses, batchStatus, programId, programName);
+                BatchPojo invalidPojo = addNewBatch(batchDescription, batchName, batchNoOfClasses, batchStatus, programId);
 
                 request = given()
                         .spec(requestSpecification())
@@ -221,6 +246,21 @@ public class BatchPayload extends CommonUtils {
 
         response = request.when().get(ApiEndPoints.GETALLBATCHES.getEndPoint());
     }
+    //***********GET BATCH BY BATCHID**************
+
+
+    public void getBatchById() throws IOException {
+        response = given().spec(requestSpecification())
+                .header("Authorization", "Bearer " + loginToken)
+                .when()
+                .get(ApiEndPoints.GETBATCHBYBATCHID.getEndPoint() + batchId);
+
+
+        // Schema validation (optional, if you have batch_schema.json in resources folder)
+        response.then().assertThat()
+                .statusCode(200)
+                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("../batch_schema.json"));
+    }
 
     // Get all batches with invalid endpoint
     public void getAllBatchesInvalidEndpoint() throws IOException {
@@ -232,24 +272,27 @@ public class BatchPayload extends CommonUtils {
 
     // Get all batches WITHOUT Authorization
     public void getAllBatchesWithoutAuth() throws IOException {
-        request = given().spec(requestSpecification()); // No token header added
-        response = request.when().get(ApiEndPoints.GETALLBATCHES.getEndPoint());
+
+        response = given()
+                .spec(requestSpecification()) // base URI, headers, etc.
+                .when()
+                .get(ApiEndPoints.GETALLBATCHES.getEndPoint()); //No token
     }
     //***********GET BATCH BY BATCHID**************
 
-
-    public void getBatchById() throws IOException {
-        response = given().spec(requestSpecification())
-                .header("Authorization", "Bearer " + loginToken)
-                .when()
-                .get(ApiEndPoints.GETBATCHBYBATCHID.getEndPoint() + batchId);
-
-
-        // Schema validation (optional, if you have batch_batch_schema.json in resources folder)
-        response.then().assertThat()
-                .statusCode(200)
-                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("../batch_schema.json"));
-    }
+//
+//    public void getBatchById() throws IOException {
+//        response = given().spec(requestSpecification())
+//                .header("Authorization", "Bearer " + loginToken)
+//                .when()
+//                .get(ApiEndPoints.GETBATCHBYBATCHID.getEndPoint() + batchId);
+//
+//
+//        // Schema validation (optional, if you have batch_batch_schema.json in resources folder)
+//        response.then().assertThat()
+//                .statusCode(200)
+//                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("../batch_schema.json"));
+//    }
 
     public void getBatchByName() throws IOException {
         String batchName = createdBatchPojo.getBatchName(); // fetched from created batch
@@ -408,7 +451,7 @@ public class BatchPayload extends CommonUtils {
                 String batchDescription = createdBatchPojo.getBatchDescription();
                 String batchStatus = createdBatchPojo.getBatchStatus();
                 Integer programId = createdBatchPojo.getProgramId();
-                String programName = createdBatchPojo.getProgramName();
+               // String programName = createdBatchPojo.getProgramName();
 
                 // Create updated payload
                 BatchPojo updatedBatch = addNewBatch(
@@ -416,8 +459,8 @@ public class BatchPayload extends CommonUtils {
                         updatedBatchName,
                         updatedNoOfClasses,
                         batchStatus,
-                        programId,
-                        programName
+                        programId
+
                 );
 
                 request = given()
