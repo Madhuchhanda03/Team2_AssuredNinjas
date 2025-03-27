@@ -63,8 +63,8 @@ public class DeleteSteps  {
 		System.out.println("Deleted batch successfully: " + batchPayload.response.asString());
 	}
 
-	@Given("Admin creates GET Request with valid Batch ID")
-	public void admin_creates_get_request_with_valid_batch_id() {
+	@Given("Admin creates GET Request with Batch ID")
+	public void admin_creates_get_request_with_batch_id() {
 		// Just ensure batchId is retained from earlier step
 	}
 

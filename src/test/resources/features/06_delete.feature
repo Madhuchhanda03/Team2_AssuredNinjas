@@ -26,6 +26,6 @@ Feature: delete program
    #### get batch by id after deleting
 
   Scenario: Check if admin able to retrive a batch after deleting the batch
-    Given Admin creates GET Request with valid Batch ID
+    Given Admin creates GET Request with Batch ID
     When Admin sends HTTPS GET Request with valid id
     Then Admin receives 200 OK Status with  batchStatus field "Inactive" in the response body.
