@@ -11,8 +11,14 @@ public enum ApiEndPoints {
 	updateprogramByprogramId("/putprogram/{programId}"),
 	deleteProgramByprogramId("/deletebyprogid/{programId}"),
 	deleteProgramByprogramName("/deletebyprogname/{programName}"),
-	programInvalidEndPoint("/saveprogramws");
-
+	programInvalidEndPoint("/saveprogramws"),
+	Rolestatus("/users/roleStatus"),
+	V2users("/v2/users"),
+	allusers("/users"),
+	role("/users/roles"),
+	Activeusers("/users/activeUsers"),
+	updateuser("/users/U54"),
+	Deletebyuserid("/users/U89");
 	String endPoint;
 
 	ApiEndPoints(String endPoint) {
