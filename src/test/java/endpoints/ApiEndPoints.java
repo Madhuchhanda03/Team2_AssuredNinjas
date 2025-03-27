@@ -12,9 +12,21 @@ public enum ApiEndPoints {
 	deleteProgramByprogramId("/deletebyprogid/"),
 	deleteProgramByprogramName("/deletebyprogname/"),
 	programInvalidEndPoint("/saveprogramws"),
+
 	createNewBatch("/batches"),
   
-  	//addNewClass("/CreateClassSchedule "),
+  	addNewClass("/CreateClassSchedule "),
+
+    CREATEBATCH("/batches"),
+    CreateBatch_invalidEndpoint("/batch99esss"),
+    GETALLBATCHES("/batches"),
+    GetAllBatches_InvalidEndpoint("/batcheshhss"),
+    GETBATCHBYBATCHID("/batches/batchId/"),
+    GETBATCHBYBATCHNAME("/batches/batchName/"),
+    GETBATCHBYPROGRAMID("/batches/program/"),
+    UPDATEBYBATCHID("/batches/"),
+    DELETEBYBATCHID("/batches/"),
+
 	getAllClass("/allClasses "),
 	getAllUpcomingClassByStudentId("/upcomingClasses/{studentID}"),
 	getClassRecordingsByBatchId("/batchRecordings/9477"),
@@ -24,17 +36,22 @@ public enum ApiEndPoints {
 	getAllClassByStaffId("/classesByStaff/U61"),
 	getAllRecordings("/classrecordings"),
 	getAllClassRecordingsByClassId("/classRecordings/57"),
-	
 	getAllClassRecordingsByInvalidClassId("/classRecordings/571000000"),
 	getClassRecordingsByInvalidBatchId("/batchRecordings/947"),
 	getClassDetailsByInvalidClassId("/class/67"),
 	getClassDetailsByInvalidClassTopic("/class/pythonSyn"),
 	getAllClassByInvalidBatchId("/classesbyBatch/947"),
 	getAllClassByInvalidStaffId("/classesByStaff/A61"),
-	getClassInvalidEndPoint("/allClasse ");
-	
+	getClassInvalidEndPoint("/allClasse "),
+	Rolestatus("/users/roleStatus"),
+	GetV2users("/v2/users"),
+	Getallusers("/users"),
+	Getrole("/users/roles"),
+	GetActiveusers("/users/activeUsers"),
+	updateuser("/users/U54"),
+	Deletebyuserid("/users/U89");
 
-  
+
 	String endPoint;
 
 	ApiEndPoints(String endPoint) {
