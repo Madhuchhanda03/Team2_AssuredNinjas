@@ -30,7 +30,16 @@ public enum ApiEndPoints {
 	getClassDetailsByInvalidClassTopic("/class/pythonSyn"),
 	getAllClassByInvalidBatchId("/classesbyBatch/947"),
 	getAllClassByInvalidStaffId("/classesByStaff/A61"),
-	getClassInvalidEndPoint("/allClasse ");
+	getClassInvalidEndPoint("/allClasse "),
+	
+	Rolestatus("/users/roleStatus"),
+	GetV2users("/v2/users"),
+	Getallusers("/users"),
+	Getrole("/users/roles"),
+	GetActiveusers("/users/activeUsers"),
+	updateuser("/users/U54"),
+	Deletebyuserid("/users/U89");
+
 	
 
   
