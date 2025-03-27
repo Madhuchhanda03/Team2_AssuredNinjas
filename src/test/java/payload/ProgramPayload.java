@@ -27,7 +27,10 @@ public class ProgramPayload extends CommonUtils {
 	ResponseSpecification resspec;
 	public Response response;
 	public static String loginToken;
+
+
 	public static int statusCode;
+
 
 	public ProgramPojo addNewProgram(String programDescription, String programName, String programStatus) {
 		ProgramPojo programPojo = new ProgramPojo();
